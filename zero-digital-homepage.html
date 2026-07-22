@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ZERO Digital — Web & Software Development</title>
+<meta name="description" content="ZERO Digital builds websites, custom software, SaaS products and mobile apps. A division of ZERO.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --primary:#0A84FF;      /* division accent: tech blue */
+    --primary-2:#7C3AED;    /* secondary accent: violet, for gradient depth */
+    --bg:#030712;
+    --surface:#0B1220;
+    --text:#F8FAFC;
+    --muted:#94A3B8;
+    --success:#22C55E;
+    --warning:#F59E0B;
+    --border: rgba(148,163,184,0.14);
+    --glass: rgba(17,24,39,0.55);
+    --mono:'JetBrains Mono', monospace;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:
+      radial-gradient(1100px 550px at 10% -10%, rgba(10,132,255,.16), transparent 60%),
+      radial-gradient(900px 500px at 100% 0%, rgba(124,58,237,.12), transparent 55%),
+      var(--bg);
+    color:var(--text); font-family:'Inter',sans-serif; -webkit-font-smoothing:antialiased; overflow-x:hidden;
+  }
+  h1,h2,h3,h4,.font-display{font-family:'Space Grotesk',sans-serif;}
+  .wrap{max-width:1240px; margin:0 auto; padding:0 28px;}
+  a{color:inherit; text-decoration:none;}
+  a:focus-visible, button:focus-visible{outline:2px solid var(--primary-2); outline-offset:3px; border-radius:6px;}
+
+  .parent-strip{background:#020509; border-bottom:1px solid var(--border); font-size:12.5px; padding:8px 16px; text-align:center; color:var(--muted);}
+  .parent-strip a{color:var(--text); font-weight:600; display:inline-flex; align-items:center; gap:6px;}
+  .parent-strip .zmark{width:16px; height:16px; border-radius:5px; background:linear-gradient(135deg,#0A84FF,#06B6D4); display:inline-flex; align-items:center; justify-content:center; font-size:9px; font-weight:800;}
+
+  header{position:sticky; top:0; z-index:100; background:rgba(3,7,18,.72); backdrop-filter:blur(16px) saturate(140%); border-bottom:1px solid var(--border);}
+  nav{display:flex; align-items:center; justify-content:space-between; padding:16px 28px;}
+  .logo{display:flex; align-items:center; gap:10px; font-family:'Space Grotesk'; font-weight:700; font-size:19px;}
+  .logo .mark{width:34px; height:34px; border-radius:10px; background:linear-gradient(135deg,var(--primary),var(--primary-2)); display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:700; color:#fff; box-shadow:0 0 22px rgba(10,132,255,.5);}
+  .logo .sub{color:var(--muted); font-weight:500; font-size:13px; margin-left:2px;}
+  .nav-links{display:flex; gap:30px; font-size:14.5px; font-weight:500; color:var(--muted);}
+  .nav-links a{position:relative; padding:6px 0; transition:color .2s;}
+  .nav-links a:hover{color:var(--text);}
+  .nav-links a::after{content:'';position:absolute; left:0; bottom:0; width:0; height:1.5px; background:var(--primary); transition:width .25s;}
+  .nav-links a:hover::after{width:100%;}
+  .nav-cta{display:flex; align-items:center; gap:12px;}
+  .btn{display:inline-flex; align-items:center; gap:8px; justify-content:center; padding:11px 22px; border-radius:12px; font-weight:600; font-size:14.5px; cursor:pointer; border:1px solid transparent; transition:all .25s cubic-bezier(.2,.8,.2,1); white-space:nowrap;}
+  .btn-primary{background:linear-gradient(135deg,var(--primary),var(--primary-2)); color:#fff; box-shadow:0 8px 24px -8px rgba(10,132,255,.55);}
+  .btn-primary:hover{transform:translateY(-2px); box-shadow:0 14px 30px -8px rgba(10,132,255,.7);}
+  .btn-ghost{background:rgba(255,255,255,.04); border:1px solid var(--border); color:var(--text);}
+  .btn-ghost:hover{background:rgba(255,255,255,.08); border-color:rgba(148,163,184,.3);}
+  .btn-sm{padding:8px 16px; font-size:13.5px; border-radius:10px;}
+  .menu-btn{display:none; background:none; border:none; color:var(--text);}
+
+  section{padding:108px 0;}
+  .eyebrow{display:inline-flex; align-items:center; gap:8px; font-size:12.5px; font-weight:600; letter-spacing:.09em; text-transform:uppercase; color:#5eb4ff; margin-bottom:18px;}
+  .eyebrow::before{content:''; width:16px; height:1.5px; background:var(--primary);}
+  .section-title{font-size:clamp(28px,4vw,42px); font-weight:600; letter-spacing:-.02em; line-height:1.15;}
+  .section-sub{color:var(--muted); font-size:16.5px; max-width:560px; margin-top:14px; line-height:1.6;}
+
+  .hero{padding:90px 0 60px;}
+  .hero-grid{display:grid; grid-template-columns:1.05fr .95fr; gap:60px; align-items:center;}
+  .hero-eyebrow{display:inline-flex; align-items:center; gap:8px; background:rgba(10,132,255,.1); border:1px solid rgba(10,132,255,.28); padding:7px 14px; border-radius:100px; font-size:13px; font-weight:600; color:#7fbaff; margin-bottom:26px;}
+  .hero-eyebrow .dot{width:6px; height:6px; border-radius:50%; background:var(--success); box-shadow:0 0 8px var(--success);}
+  .hero h1{font-size:clamp(38px,5.2vw,60px); line-height:1.06; letter-spacing:-.03em; font-weight:700;}
+  .hero h1 .grad{background:linear-gradient(120deg,var(--primary),var(--primary-2) 65%); -webkit-background-clip:text; background-clip:text; color:transparent;}
+  .hero p.lead{margin-top:22px; font-size:17.5px; color:var(--muted); max-width:500px; line-height:1.65;}
+  .hero-ctas{display:flex; gap:14px; margin-top:36px; flex-wrap:wrap;}
+  .hero-stack{display:flex; gap:10px; margin-top:44px; flex-wrap:wrap;}
+  .stack-chip{font-size:12.5px; font-family:var(--mono); padding:6px 12px; border-radius:8px; background:rgba(255,255,255,.04); border:1px solid var(--border); color:var(--muted);}
+
+  .code-window{background:linear-gradient(160deg, rgba(11,18,32,.95), rgba(6,11,22,.98)); border:1px solid var(--border); border-radius:18px; overflow:hidden; box-shadow:0 30px 80px -30px rgba(0,0,0,.7), 0 0 0 1px rgba(10,132,255,.06);}
+  .code-titlebar{display:flex; align-items:center; gap:8px; padding:14px 18px; border-bottom:1px solid var(--border); background:rgba(255,255,255,.02);}
+  .dot-btn{width:11px; height:11px; border-radius:50%;}
+  .code-titlebar span{margin-left:10px; font-size:12px; color:var(--muted); font-family:var(--mono);}
+  .code-body{padding:24px; font-family:var(--mono); font-size:13px; line-height:2; color:#cbd5e1;}
+  .code-body .c1{color:#7fbaff;} .code-body .c2{color:#f59e0b;} .code-body .c3{color:#a78bfa;} .code-body .c4{color:#22c55e;} .code-body .comment{color:#4b5568;}
+  .typed-cursor{display:inline-block; width:7px; height:15px; background:var(--primary); vertical-align:middle; animation:blink 1s step-end infinite;}
+  @keyframes blink{50%{opacity:0;}}
+
+  .trusted{padding:50px 0; border-top:1px solid var(--border); border-bottom:1px solid var(--border);}
+  .trusted p{text-align:center; font-size:12.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); margin-bottom:30px;}
+  .logo-row{display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:36px; opacity:.55;}
+  .logo-row span{font-family:'Space Grotesk'; font-weight:600; font-size:18px;}
+
+  .services-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:22px; margin-top:56px;}
+  .svc-card{background:var(--glass); border:1px solid var(--border); border-radius:20px; padding:30px; backdrop-filter:blur(10px); transition:all .35s cubic-bezier(.2,.8,.2,1); position:relative; overflow:hidden;}
+  .svc-card::before{content:''; position:absolute; inset:0; opacity:0; transition:opacity .35s; background:radial-gradient(240px 140px at 20% 0%, rgba(10,132,255,.18), transparent 70%);}
+  .svc-card:hover{transform:translateY(-6px); border-color:rgba(148,163,184,.32); box-shadow:0 20px 50px -20px rgba(0,0,0,.6);}
+  .svc-card:hover::before{opacity:1;}
+  .svc-icon{width:46px; height:46px; border-radius:13px; display:flex; align-items:center; justify-content:center; font-size:19px; margin-bottom:18px; background:rgba(10,132,255,.1); border:1px solid rgba(10,132,255,.28); position:relative; z-index:1;}
+  .svc-card h4{font-size:17px; font-weight:600; margin-bottom:8px; position:relative; z-index:1;}
+  .svc-card p{color:var(--muted); font-size:13.5px; line-height:1.6; position:relative; z-index:1;}
+
+  .stack-band{border-top:1px solid var(--border); border-bottom:1px solid var(--border); background:var(--surface); padding:56px 0; overflow:hidden;}
+  .marquee{display:flex; gap:14px; width:max-content; animation:scroll-left 32s linear infinite;}
+  .marquee-chip{font-family:var(--mono); font-size:13.5px; padding:10px 18px; border-radius:10px; border:1px solid var(--border); background:rgba(255,255,255,.03); color:#cbd5e1; white-space:nowrap;}
+  @keyframes scroll-left{from{transform:translateX(0);} to{transform:translateX(-50%);}}
+  @media (prefers-reduced-motion: reduce){.marquee{animation:none;}}
+
+  .pf-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:22px; margin-top:56px;}
+  .pf-card{border-radius:18px; overflow:hidden; border:1px solid var(--border); position:relative; aspect-ratio:4/3; background:linear-gradient(160deg,#101a30,#080d18);}
+  .pf-overlay{position:absolute; inset:0; background:linear-gradient(0deg, rgba(3,7,18,.92) 15%, transparent 65%); display:flex; align-items:flex-end; padding:20px;}
+  .pf-overlay p{font-size:11.5px; color:#5eb4ff; font-weight:600; letter-spacing:.04em; text-transform:uppercase;}
+  .pf-overlay h5{font-size:16px; font-weight:600; margin-top:4px;}
+
+  .dash-shell{border:1px solid var(--border); border-radius:22px; overflow:hidden; background:var(--surface); margin-top:56px; box-shadow:0 30px 80px -35px rgba(0,0,0,.7);}
+  .dash-top{display:flex; align-items:center; justify-content:space-between; padding:18px 24px; border-bottom:1px solid var(--border); background:rgba(255,255,255,.02);}
+  .dash-tabs{display:flex; gap:20px; font-size:13.5px; color:var(--muted);}
+  .dash-tabs .active{color:var(--text); font-weight:600;}
+  .dash-body{display:grid; grid-template-columns:220px 1fr; min-height:340px;}
+  .dash-side{border-right:1px solid var(--border); padding:20px; display:flex; flex-direction:column; gap:6px;}
+  .dash-side a{font-size:13.5px; padding:9px 12px; border-radius:9px; color:var(--muted);}
+  .dash-side a.active{background:rgba(10,132,255,.12); color:#7fbaff; font-weight:600;}
+  .dash-main{padding:28px;}
+  .dash-cards{display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-bottom:24px;}
+  .dcard{border:1px solid var(--border); border-radius:14px; padding:18px; background:rgba(255,255,255,.02);}
+  .dcard span{font-size:12px; color:var(--muted);}
+  .dcard b{display:block; font-family:'Space Grotesk'; font-size:24px; margin-top:6px;}
+  .dash-chart{height:110px; border:1px solid var(--border); border-radius:14px; background:linear-gradient(180deg, rgba(10,132,255,.1), transparent); position:relative; overflow:hidden;}
+  .dash-chart svg{width:100%; height:100%;}
+
+  .pricing-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:22px; margin-top:56px;}
+  .price-card{border:1px solid var(--border); border-radius:20px; padding:34px; background:rgba(255,255,255,.02); display:flex; flex-direction:column;}
+  .price-card.feat{border-color:rgba(10,132,255,.5); background:linear-gradient(160deg, rgba(10,132,255,.1), rgba(124,58,237,.05)); position:relative;}
+  .price-card.feat::before{content:'Most Popular'; position:absolute; top:-13px; left:50%; transform:translateX(-50%); background:linear-gradient(135deg,var(--primary),var(--primary-2)); font-size:11.5px; font-weight:700; padding:5px 14px; border-radius:100px; color:#fff;}
+  .price-card h4{font-size:16px; font-weight:600; color:var(--muted);}
+  .price-card .amt{font-family:'Space Grotesk'; font-size:38px; font-weight:700; margin:14px 0 4px;}
+  .price-card .amt span{font-size:14px; color:var(--muted); font-weight:500;}
+  .price-list{margin:24px 0; display:flex; flex-direction:column; gap:11px; flex:1;}
+  .price-list li{list-style:none; display:flex; gap:9px; font-size:14px; color:#cbd5e1;}
+  .price-list li::before{content:'✓'; color:var(--success); font-weight:700;}
+
+  .test-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:22px; margin-top:56px;}
+  .test-card{border:1px solid var(--border); border-radius:20px; padding:30px; background:rgba(255,255,255,.02);}
+  .stars{color:var(--warning); font-size:14px; margin-bottom:16px;}
+  .test-card p{font-size:15px; line-height:1.65; color:#e2e8f0;}
+  .test-who{display:flex; align-items:center; gap:12px; margin-top:22px;}
+  .test-who .av{width:38px; height:38px; border-radius:50%; background:linear-gradient(135deg,var(--primary),var(--primary-2));}
+  .test-who h5{font-size:13.5px; font-weight:600;}
+  .test-who span{font-size:12px; color:var(--muted);}
+
+  .faq-list{max-width:760px; margin:56px auto 0;}
+  .faq-item{border-bottom:1px solid var(--border); padding:22px 0;}
+  .faq-q{display:flex; justify-content:space-between; align-items:center; cursor:pointer; font-size:15.5px; font-weight:600;}
+  .faq-q .plus{color:var(--primary); font-size:20px; transition:transform .3s;}
+  .faq-item.open .plus{transform:rotate(45deg);}
+  .faq-a{max-height:0; overflow:hidden; transition:max-height .35s ease;}
+  .faq-item.open .faq-a{max-height:200px;}
+  .faq-a p{padding-top:14px; font-size:14.5px; color:var(--muted); line-height:1.65;}
+
+  .quote-band{border-radius:28px; border:1px solid var(--border); background:linear-gradient(135deg, rgba(10,132,255,.14), rgba(124,58,237,.08)); padding:64px; display:flex; justify-content:space-between; align-items:center; gap:40px; flex-wrap:wrap;}
+  .quote-band h3{font-size:29px; font-weight:600; max-width:460px;}
+  .quote-band p{color:var(--muted); margin-top:12px; max-width:420px;}
+
+  footer{border-top:1px solid var(--border); background:#020509; padding:70px 0 30px;}
+  .foot-grid{display:grid; grid-template-columns:1.6fr 1fr 1fr 1fr 1.2fr; gap:40px;}
+  .foot-col h5{font-size:13px; letter-spacing:.05em; text-transform:uppercase; color:var(--muted); margin-bottom:18px;}
+  .foot-col a{display:block; font-size:14px; color:#cbd5e1; margin-bottom:12px; transition:color .2s;}
+  .foot-col a:hover{color:var(--primary);}
+  .foot-social{display:flex; gap:10px; margin-top:18px; flex-wrap:wrap;}
+  .foot-social a{width:36px; height:36px; border-radius:10px; border:1px solid var(--border); display:flex; align-items:center; justify-content:center; font-size:13px;}
+  .foot-social a:hover{background:var(--primary); border-color:var(--primary); color:#fff;}
+  .newsletter{display:flex; gap:8px; margin-top:16px;}
+  .newsletter input{flex:1; background:rgba(255,255,255,.04); border:1px solid var(--border); border-radius:10px; padding:11px 14px; color:var(--text); font-size:13.5px;}
+  .foot-bottom{border-top:1px solid var(--border); margin-top:56px; padding-top:26px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:14px; font-size:13px; color:var(--muted);}
+  .foot-bottom a{color:var(--muted);}
+  .foot-bottom a:hover{color:var(--text);}
+
+  .reveal{opacity:0; transform:translateY(24px); transition:opacity .7s ease, transform .7s ease;}
+  .reveal.in{opacity:1; transform:translateY(0);}
+  @media (prefers-reduced-motion: reduce){.reveal{opacity:1; transform:none; transition:none;}}
+
+  @media (max-width:1080px){
+    .hero-grid{grid-template-columns:1fr;}
+    .services-grid, .pf-grid, .pricing-grid, .test-grid{grid-template-columns:repeat(2,1fr);}
+    .dash-body{grid-template-columns:1fr;}
+    .dash-side{display:none;}
+    .foot-grid{grid-template-columns:1fr 1fr; gap:36px;}
+  }
+  @media (max-width:760px){
+    .nav-links{display:none;} .menu-btn{display:block;}
+    section{padding:70px 0;}
+    .services-grid,.pf-grid,.pricing-grid,.test-grid,.dash-cards{grid-template-columns:1fr;}
+    .foot-grid{grid-template-columns:1fr;}
+    .quote-band{padding:40px 26px; text-align:center; justify-content:center;}
+  }
+</style>
+</head>
+<body>
+
+<div class="parent-strip">A division of <a href="https://zero.com" target="_blank" rel="noopener"><span class="zmark">Z</span> ZERO</a> — the parent ecosystem</div>
+
+<header>
+  <nav class="wrap">
+    <a href="#top" class="logo"><span class="mark">Zd</span> ZERO <span class="sub">Digital</span></a>
+    <div class="nav-links">
+      <a href="#about">About</a>
+      <a href="#services">Services</a>
+      <a href="#portfolio">Portfolio</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#blog">Blog</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <div class="nav-cta">
+      <a href="#contact" class="btn btn-ghost btn-sm">Contact</a>
+      <a href="#quote" class="btn btn-primary btn-sm">Request a Quote</a>
+    </div>
+    <button class="menu-btn" aria-label="Open menu">☰</button>
+  </nav>
+</header>
+
+<main id="top">
+
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <div class="hero-eyebrow"><span class="dot"></span> Web & software, built to scale</div>
+        <h1>Software that carries <span class="grad">real weight.</span></h1>
+        <p class="lead">ZERO Digital designs and builds websites, custom software, SaaS platforms and mobile apps for companies that can't afford to rebuild in two years.</p>
+        <div class="hero-ctas">
+          <a href="#quote" class="btn btn-primary">Request a Quote</a>
+          <a href="#portfolio" class="btn btn-ghost">See Our Work ▸</a>
+        </div>
+        <div class="hero-stack">
+          <span class="stack-chip">Next.js</span>
+          <span class="stack-chip">TypeScript</span>
+          <span class="stack-chip">Node.js</span>
+          <span class="stack-chip">PostgreSQL</span>
+          <span class="stack-chip">AWS</span>
+          <span class="stack-chip">Kubernetes</span>
+        </div>
+      </div>
+
+      <div class="code-window reveal">
+        <div class="code-titlebar">
+          <div class="dot-btn" style="background:#ef4444;"></div>
+          <div class="dot-btn" style="background:#f59e0b;"></div>
+          <div class="dot-btn" style="background:#22c55e;"></div>
+          <span>deploy.ts</span>
+        </div>
+        <div class="code-body">
+<span class="comment">// zero digital — build pipeline</span><br>
+<span class="c1">const</span> project = <span class="c1">await</span> zero.<span class="c2">init</span>({<br>
+&nbsp;&nbsp;client: <span class="c4">"nordwave"</span>,<br>
+&nbsp;&nbsp;stack: [<span class="c4">"next"</span>, <span class="c4">"postgres"</span>, <span class="c4">"aws"</span>],<br>
+&nbsp;&nbsp;uptime_target: <span class="c3">99.98</span><br>
+});<br><br>
+<span class="c1">await</span> project.<span class="c2">ship</span>();<br>
+<span class="comment">// ✓ deployed in 3.2s</span><span class="typed-cursor"></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="trusted wrap" style="border:none;">
+    <p>Built for</p>
+    <div class="logo-row">
+      <span>Nordwave</span><span>Kestrel & Co.</span><span>Lumen Partners</span><span>Solace Group</span><span>Aviary Labs</span>
+    </div>
+  </div>
+
+  <section id="services">
+    <div class="wrap">
+      <div class="eyebrow reveal">What We Build</div>
+      <h2 class="section-title reveal">Services</h2>
+      <p class="section-sub reveal">From a marketing site to the platform running your whole business.</p>
+      <div class="services-grid">
+        <div class="svc-card reveal"><div class="svc-icon">🌐</div><h4>Website Development</h4><p>Marketing sites and web apps built on Next.js, tuned for speed and search.</p></div>
+        <div class="svc-card reveal"><div class="svc-icon">⚙️</div><h4>Custom Software</h4><p>Internal tools and platforms shaped around how your team actually works.</p></div>
+        <div class="svc-card reveal"><div class="svc-icon">☁️</div><h4>SaaS Development</h4><p>Multi-tenant products built to onboard your first customer and your ten-thousandth.</p></div>
+        <div class="svc-card reveal"><div class="svc-icon">📱</div><h4>Mobile Apps</h4><p>Native-feeling iOS and Android apps from a single React Native codebase.</p></div>
+        <div class="svc-card reveal"><div class="svc-icon">🎨</div><h4>UI/UX Design</h4><p>Interfaces designed around what users actually do, not just what looks good in a deck.</p></div>
+        <div class="svc-card reveal"><div class="svc-icon">🔌</div><h4>API Development</h4><p>REST and GraphQL APIs documented well enough that your team stops asking us questions.</p></div>
+        <div class="svc-card reveal"><div class="svc-icon">☁️</div><h4>Cloud Solutions</h4><p>AWS and GCP infrastructure sized for today's traffic and next year's.</p></div>
+        <div class="svc-card reveal"><div class="svc-icon">🛠️</div><h4>Maintenance</h4><p>Ongoing updates, monitoring and bug fixes so your product keeps working quietly.</p></div>
+        <div class="svc-card reveal"><div class="svc-icon">🖥️</div><h4>Hosting</h4><p>Managed hosting with uptime SLAs and a team that answers at 2am.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="stack-band">
+    <div class="marquee" id="marquee"></div>
+  </div>
+
+  <section id="portfolio">
+    <div class="wrap">
+      <div class="eyebrow reveal">Selected Work</div>
+      <h2 class="section-title reveal">Software Projects</h2>
+      <p class="section-sub reveal">A sample of platforms and products shipped by the team.</p>
+      <div class="pf-grid">
+        <div class="pf-card reveal"><div class="pf-overlay"><div><p>SaaS · FinTech</p><h5>Nordwave Banking Platform</h5></div></div></div>
+        <div class="pf-card reveal"><div class="pf-overlay"><div><p>Web App · Logistics</p><h5>Lumen Fleet Tracker</h5></div></div></div>
+        <div class="pf-card reveal"><div class="pf-overlay"><div><p>Mobile · Wellness</p><h5>Solace Companion App</h5></div></div></div>
+        <div class="pf-card reveal"><div class="pf-overlay"><div><p>API · Marketplace</p><h5>Aviary Booking Engine</h5></div></div></div>
+        <div class="pf-card reveal"><div class="pf-overlay"><div><p>Web · E-commerce</p><h5>Marbek Storefront Rebuild</h5></div></div></div>
+        <div class="pf-card reveal"><div class="pf-overlay"><div><p>Internal Tool · Ops</p><h5>Kestrel Ops Dashboard</h5></div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="eyebrow reveal">Client Dashboard Preview</div>
+      <h2 class="section-title reveal">See your project, live</h2>
+      <p class="section-sub reveal">Every client gets a dashboard tracking deploys, uptime and open tickets in real time.</p>
+      <div class="dash-shell reveal">
+        <div class="dash-top">
+          <div class="dash-tabs"><span class="active">Overview</span><span>Deploys</span><span>Uptime</span><span>Tickets</span></div>
+          <span style="font-size:12px; color:var(--success);">● All systems operational</span>
+        </div>
+        <div class="dash-body">
+          <div class="dash-side">
+            <a class="active">Overview</a><a>Deploys</a><a>Environments</a><a>Uptime</a><a>Billing</a><a>Team</a>
+          </div>
+          <div class="dash-main">
+            <div class="dash-cards">
+              <div class="dcard"><span>Uptime (30d)</span><b>99.98%</b></div>
+              <div class="dcard"><span>Deploys this week</span><b>14</b></div>
+              <div class="dcard"><span>Open tickets</span><b>2</b></div>
+            </div>
+            <div class="dash-chart">
+              <svg viewBox="0 0 400 110" preserveAspectRatio="none">
+                <polyline points="0,80 40,70 80,75 120,55 160,60 200,40 240,45 280,25 320,32 360,15 400,20" fill="none" stroke="#0A84FF" stroke-width="2"/>
+                <polyline points="0,80 40,70 80,75 120,55 160,60 200,40 240,45 280,25 320,32 360,15 400,20 400,110 0,110" fill="url(#g1)" stroke="none" opacity="0.25"/>
+                <defs><linearGradient id="g1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#0A84FF"/><stop offset="100%" stop-color="transparent"/></linearGradient></defs>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="pricing">
+    <div class="wrap">
+      <div class="eyebrow reveal">Pricing</div>
+      <h2 class="section-title reveal">Plans built around project size</h2>
+      <p class="section-sub reveal">Every engagement starts with a scoped proposal — these are starting points.</p>
+      <div class="pricing-grid">
+        <div class="price-card reveal">
+          <h4>Launch</h4>
+          <div class="amt">$8,000<span> starting</span></div>
+          <ul class="price-list">
+            <li>Marketing website</li>
+            <li>Up to 8 pages</li>
+            <li>CMS integration</li>
+            <li>30-day support window</li>
+          </ul>
+          <a href="#quote" class="btn btn-ghost">Request a Quote</a>
+        </div>
+        <div class="price-card feat reveal">
+          <h4>Platform</h4>
+          <div class="amt">$35,000<span> starting</span></div>
+          <ul class="price-list">
+            <li>Custom web application</li>
+            <li>API + database design</li>
+            <li>Auth & user dashboard</li>
+            <li>90-day support window</li>
+          </ul>
+          <a href="#quote" class="btn btn-primary">Request a Quote</a>
+        </div>
+        <div class="price-card reveal">
+          <h4>Enterprise</h4>
+          <div class="amt">Custom</div>
+          <ul class="price-list">
+            <li>Multi-tenant SaaS build</li>
+            <li>Dedicated engineering pod</li>
+            <li>SLA-backed hosting</li>
+            <li>Ongoing retainer support</li>
+          </ul>
+          <a href="#quote" class="btn btn-ghost">Talk to Sales</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="eyebrow reveal">Client Feedback</div>
+      <h2 class="section-title reveal">What clients say</h2>
+      <div class="test-grid">
+        <div class="test-card reveal"><div class="stars">★★★★★</div><p>Zero Digital rebuilt our platform without a single day of downtime. That alone earned the next three projects.</p><div class="test-who"><div class="av"></div><div><h5>Priya Nair</h5><span>VP Engineering, Nordwave</span></div></div></div>
+        <div class="test-card reveal"><div class="stars">★★★★★</div><p>The dashboard they built us replaced four spreadsheets and a lot of Slack messages.</p><div class="test-who"><div class="av"></div><div><h5>Owen Ferris</h5><span>COO, Lumen Partners</span></div></div></div>
+        <div class="test-card reveal"><div class="stars">★★★★★</div><p>Documentation was thorough enough that our internal team took over maintenance with zero handoff friction.</p><div class="test-who"><div class="av"></div><div><h5>Rina Kobayashi</h5><span>CTO, Solace Group</span></div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="blog">
+    <div class="wrap">
+      <div class="eyebrow reveal">Engineering Blog</div>
+      <h2 class="section-title reveal">Notes from the team</h2>
+      <div class="pf-grid" style="margin-top:56px;">
+        <div class="pf-card reveal" style="aspect-ratio:16/11;"><div class="pf-overlay"><div><p>6 min read</p><h5>What we changed after our third API redesign</h5></div></div></div>
+        <div class="pf-card reveal" style="aspect-ratio:16/11;"><div class="pf-overlay"><div><p>4 min read</p><h5>Choosing Postgres over Mongo, again</h5></div></div></div>
+        <div class="pf-card reveal" style="aspect-ratio:16/11;"><div class="pf-overlay"><div><p>7 min read</p><h5>A migration playbook we actually follow</h5></div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="eyebrow reveal" style="justify-content:center; display:flex;">FAQ</div>
+      <h2 class="section-title reveal" style="text-align:center;">Common questions</h2>
+      <div class="faq-list">
+        <div class="faq-item reveal">
+          <div class="faq-q">How long does a typical project take? <span class="plus">+</span></div>
+          <div class="faq-a"><p>A marketing site typically runs 4–6 weeks. A custom platform runs 3–6 months depending on scope.</p></div>
+        </div>
+        <div class="faq-item reveal">
+          <div class="faq-q">Do you work with our existing team? <span class="plus">+</span></div>
+          <div class="faq-a"><p>Yes — we regularly embed alongside internal engineering teams rather than replacing them.</p></div>
+        </div>
+        <div class="faq-item reveal">
+          <div class="faq-q">What happens after launch? <span class="plus">+</span></div>
+          <div class="faq-a"><p>Every project includes a support window, and ongoing maintenance retainers are available after that.</p></div>
+        </div>
+        <div class="faq-item reveal">
+          <div class="faq-q">Can Zero Digital work with other Zero divisions? <span class="plus">+</span></div>
+          <div class="faq-a"><p>Often — security reviews from Zero Security or brand work from Zero Creative slot in without extra procurement.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="quote">
+    <div class="wrap">
+      <div class="quote-band reveal">
+        <div>
+          <h3>Have a build in mind?</h3>
+          <p>Tell us the scope — we'll come back with a proposal within two business days.</p>
+        </div>
+        <a href="mailto:digital@zero.com" class="btn btn-primary">Request a Quote</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer id="contact">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-col">
+        <a href="#top" class="logo" style="margin-bottom:16px;"><span class="mark">Zd</span> ZERO <span class="sub">Digital</span></a>
+        <p style="font-size:14px; color:var(--muted); line-height:1.6; max-width:280px; margin-bottom:20px;">Web and software development, part of the ZERO ecosystem.</p>
+        <div class="newsletter">
+          <input type="email" placeholder="Your email address" aria-label="Email address">
+          <a href="#" class="btn btn-primary btn-sm">Join</a>
+        </div>
+        <div class="foot-social">
+          <a href="#" aria-label="YouTube">▶</a>
+          <a href="#" aria-label="GitHub">gh</a>
+          <a href="#" aria-label="LinkedIn">in</a>
+          <a href="#" aria-label="Instagram">◎</a>
+          <a href="#" aria-label="Facebook">f</a>
+          <a href="#" aria-label="X">X</a>
+        </div>
+      </div>
+      <div class="foot-col">
+        <h5>Company</h5>
+        <a href="#about">About</a>
+        <a href="#services">Services</a>
+        <a href="#portfolio">Portfolio</a>
+        <a href="#blog">Blog</a>
+        <a href="#">Careers</a>
+      </div>
+      <div class="foot-col">
+        <h5>Resources</h5>
+        <a href="#pricing">Pricing</a>
+        <a href="#">FAQ</a>
+        <a href="#">Case Studies</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms</a>
+      </div>
+      <div class="foot-col">
+        <h5>Zero Ecosystem</h5>
+        <a href="https://zero.com" target="_blank" rel="noopener">ZERO (Parent)</a>
+        <a href="https://creative.zero.com" target="_blank" rel="noopener">Zero Creative</a>
+        <a href="https://security.zero.com" target="_blank" rel="noopener">Zero Security</a>
+        <a href="https://marketing.zero.com" target="_blank" rel="noopener">Zero Marketing</a>
+      </div>
+      <div class="foot-col">
+        <h5>Contact</h5>
+        <p style="font-size:14px; color:var(--muted); line-height:1.7;">digital@zero.com<br>+1 (512) 555-0182</p>
+        <a href="#quote" class="btn btn-primary btn-sm" style="margin-top:14px; display:inline-flex;">Request a Quote</a>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 ZERO Digital, a division of ZERO Holdings, Inc.</span>
+      <span><a href="#">Privacy</a> · <a href="#">Terms</a> · <a href="https://zero.com" target="_blank" rel="noopener">Back to ZERO ↗</a></span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} });
+  },{threshold:.12});
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+  const stack = ["Next.js","React","TypeScript","Node.js","PostgreSQL","AWS","Docker","Kubernetes","GraphQL","Tailwind CSS","Redis","Terraform"];
+  const marquee = document.getElementById('marquee');
+  [...stack, ...stack].forEach(s=>{
+    const c = document.createElement('span'); c.className='marquee-chip'; c.textContent=s; marquee.appendChild(c);
+  });
+
+  document.querySelectorAll('.faq-item').forEach(item=>{
+    item.querySelector('.faq-q').addEventListener('click',()=>{
+      const isOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item').forEach(i=>i.classList.remove('open'));
+      if(!isOpen) item.classList.add('open');
+    });
+  });
+
+  const header = document.querySelector('header');
+  window.addEventListener('scroll', ()=>{
+    header.style.boxShadow = window.scrollY > 8 ? '0 8px 30px -12px rgba(0,0,0,.6)' : 'none';
+  });
+</script>
+
+</body>
+</html>
